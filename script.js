@@ -147,8 +147,11 @@ const allQuestions = [
           </div>
           <span class="progress-label">${idx+1} / ${QUIZ_COUNT}</span>
         </div>
+        <button id="next-btn" class="next-btn" style="margin:30px auto 0 auto;display:block;padding:15px 38px;border:none;background:linear-gradient(90deg,#4e54c8 0%,#8f94fb 100%);color:#fff;font-size:1.08em;font-weight:bold;letter-spacing:0.09em;border-radius:11px;cursor:pointer;box-shadow:0 2px 9px rgba(80,120,255,0.10);">다음 문제</button>
       </div>
     `;
+  
+    // 선택지 클릭 처리
     document.querySelectorAll('.option-block').forEach(block => {
       block.addEventListener('click', function() {
         if (userAnswers[idx] !== null) return;
@@ -156,9 +159,21 @@ const allQuestions = [
         userAnswers[idx] = selected;
         document.querySelectorAll('.option-block').forEach(b => b.classList.remove('selected'));
         this.classList.add('selected');
-        setTimeout(() => showQuestion(current + 1), 280);
+        // 다음문제 버튼 활성화
+        document.getElementById('next-btn').disabled = false;
+        document.getElementById('next-btn').style.opacity = "1";
       });
     });
+  
+    // 다음문제 버튼(처음엔 비활성화)
+    const nextBtn = document.getElementById('next-btn');
+    if (userAnswers[idx] === null) {
+      nextBtn.disabled = true;
+      nextBtn.style.opacity = "0.5";
+    }
+    nextBtn.onclick = function() {
+      showQuestion(current + 1);
+    };
   }
   
   function showPopupAnswer() {
